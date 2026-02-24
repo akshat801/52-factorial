@@ -92,6 +92,7 @@
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .stat-card {
     border-radius: 12px; padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 12px;
   }
   .stat-card.gold {
     background: rgba(201,169,110,0.06); border: 1px solid rgba(201,169,110,0.15);
@@ -102,7 +103,7 @@
   .stat-value {
     font-size: 28px; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
   }
-  .stat-label { font-size: 12px; color: #6b6b7b; margin-top: 4px; }
+  .stat-label { font-size: 12px; color: #6b6b7b; margin-top: auto; }
 
   .fun-fact {
     margin-top: 24px; padding: 20px; background: rgba(255,255,255,0.02);
@@ -123,6 +124,7 @@
   .comparison-name { color: #9a9aaa; }
   .comparison-name.highlight { color: #c9a96e; font-weight: 700; }
   .comparison-value { font-family: 'DM Mono', monospace; font-size: 12px; color: #6b6b7b; }
+  .comparison-value.highlight { color: #c9a96e; font-weight: 500; }
   .bar-track {
     height: 6px; border-radius: 3px; background: rgba(255,255,255,0.04); overflow: hidden;
   }
@@ -149,7 +151,7 @@
   }
 
   /* Tab 3: Shuffle */
-  .shuffle-controls { text-align: center; margin-bottom: 24px; }
+  .shuffle-controls { text-align: center; margin-top: 28px; }
   .shuffle-btn {
     padding: 12px 32px; min-width: 200px; border-radius: 100px; border: none;
     background: linear-gradient(135deg, #c9a96e, #e8c068); color: #0a0a0f;
@@ -202,7 +204,7 @@
   <!-- Tab 0: The Number -->
   <div class="tab-panel" id="panel-0">
     <div class="number-box">
-      <div class="number-label">The full number — 68 digits</div>
+      <div class="number-label">The full number, 68 digits</div>
       <div class="number-digits" id="digits-container"></div>
     </div>
     <div class="stats-grid">
@@ -217,7 +219,7 @@
     </div>
     <div class="fun-fact">
       Every time you shuffle a deck of cards thoroughly, you almost certainly create an arrangement that has
-      <span class="gold">never existed before</span> in the history of the universe — and never will again.
+      <span class="gold">never existed before</span> in the history of the universe, and never will again.
     </div>
   </div>
 
@@ -233,11 +235,11 @@
 
   <!-- Tab 3: Shuffle -->
   <div class="tab-panel" id="panel-3">
+    <div class="deck-grid" id="deck-grid"></div>
     <div class="shuffle-controls">
       <button class="shuffle-btn" id="shuffle-btn" onclick="handleShuffle()">🃏 Shuffle the deck</button>
-      <div class="shuffle-info">Shuffles: <span id="shuffle-count">0</span> — Each one almost certainly unique in all of history</div>
+      <div class="shuffle-info">Shuffles: <span id="shuffle-count">0</span>. Each one almost certainly unique in all of history</div>
     </div>
-    <div class="deck-grid" id="deck-grid"></div>
     <div class="odds-box">
       The arrangement above has a
       <span class="gold">1 in 80,658,175,170,943,878,571,660,636,856,403,766,975,289,505,440,883,277,824,000,000,000,000</span>
@@ -267,8 +269,8 @@ const comparisons = [
 ];
 
 const analogies = [
-  { title: "Every second, pick a new spot on Earth", icon: "🌍", description: "Stand on the equator. Every second, take one step. After you've walked around the entire Earth, remove one drop from the Pacific Ocean. Repeat until the ocean is empty. Then, lay down one sheet of paper. Refill the ocean. Walk around the Earth again. When the stack of paper reaches the Sun — you're not even close to 52!" },
-  { title: "Atoms in the universe", icon: "⚛️", description: "The observable universe has roughly 10⁸⁰ atoms. 52! is about 8 × 10⁶⁷. That's smaller, right? Sure — but if every atom in the universe contained its own universe with 10⁸⁰ atoms, you'd still only have 10¹⁶⁰ — barely scratching the surface of what 52! feels like when you try to count it." },
+  { title: "Every second, pick a new spot on Earth", icon: "🌍", description: "Stand on the equator. Every second, take one step. After you've walked around the entire Earth, remove one drop from the Pacific Ocean. Repeat until the ocean is empty. Then, lay down one sheet of paper. Refill the ocean. Walk around the Earth again. When the stack of paper reaches the Sun, you're not even close to 52!" },
+  { title: "More than atoms on Earth", icon: "⚛️", description: "Earth contains roughly 10⁵⁰ atoms. 52! is 8 × 10⁶⁷. That means the number of ways to shuffle a deck is about 100 million trillion times more than every atom on our planet. You'd run out of atoms long before you ran out of shuffles." },
   { title: "Time since the Big Bang", icon: "💥", description: "The universe is ~4.3 × 10¹⁷ seconds old. If you shuffled a deck once per second since the Big Bang, you'd have made about 4.3 × 10¹⁷ shuffles. That's 0.000000000000000000000000000000000000000000000000005% of all possible arrangements." },
   { title: "Grains of sand on every star", icon: "⭐", description: "Earth has roughly 7.5 × 10¹⁸ grains of sand. The observable universe has about 10²⁴ stars. Even if every star had an Earth-like planet covered in sand, the total grains would be ~7.5 × 10⁴², which is still a trillion trillion times smaller than 52!" },
 ];
@@ -345,10 +347,10 @@ comparisons.forEach((c, i) => {
   div.innerHTML = `
     <div class="comparison-header">
       <span class="comparison-name ${isHighlight ? 'highlight' : ''}">${c.label}</span>
-      <span class="comparison-value">${c.value}</span>
+      <span class="comparison-value ${isHighlight ? 'highlight' : ''}">${c.value}</span>
     </div>
     <div class="bar-track">
-      <div class="bar-fill ${isHighlight ? 'highlight' : ''}" data-width="${c.bar * 100}" style="transition-delay:${i * 150}ms"></div>
+      <div class="bar-fill ${isHighlight ? 'highlight' : ''}" data-width="${c.bar * 100}"></div>
     </div>
   `;
   scaleBarsEl.appendChild(div);
